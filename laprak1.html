@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Praktikum Pemrograman Mobile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .header-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .info-table {
+            margin: 0 auto;
+            text-align: left;
+            border-spacing: 10px;
+        }
+        .content-section {
+            background-color: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .image-placeholder {
+            background-color: #e9ecef;
+            border: 2px dashed #ced4da;
+            padding: 30px;
+            text-align: center;
+            color: #6c757d;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <h1>LAPORAN PRAKTIKUM PEMROGRAMAN MOBILE</h1>
+        <h3>Form Input, Validasi, dan Studi Kasus Kalkulator pada Flutter</h3>
+        <table class="info-table">
+            <tr><td><strong>Nama</strong></td><td>: Achmad Abidy</td></tr>
+            <tr><td><strong>NIM</strong></td><td>: 2411532017</td></tr>
+            <tr><td><strong>Program Studi</strong></td><td>: Informatika</td></tr>
+            <tr><td><strong>Mata Kuliah</strong></td><td>: Pemrograman Mobile</td></tr>
+        </table>
+    </div>
+
+    <div class="content-section">
+        <h2>I. Tujuan Praktikum.</h2>
+        <ul>
+            <li>Memahami cara membuat form input menggunakan widget TextField dan TextFormField pada Flutter.</li>
+            <li>Menerapkan validasi input menggunakan Form dan GlobalKey&lt;FormState&gt;.</li>
+            <li>Memahami penggunaan TextEditingController untuk mengambil dan mengelola nilai input.</li>
+            <li>Menerapkan event handling (onChanged, onPressed) untuk merespons interaksi pengguna.</li>
+            <li>Mengimplementasikan studi kasus sederhana berupa kalkulator dengan operasi tambah, kurang, kali, dan bagi..</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>II. Dasar Teori</h2>
+        <p>Flutter menyediakan dua widget utama untuk menerima input teks dari pengguna, yaitu TextField dan TextFormField.. TextField digunakan untuk input teks sederhana tanpa validasi bawaan, sedangkan TextFormField dirancang untuk digunakan di dalam widget Form karena memiliki parameter validator yang memudahkan proses validasi data sebelum diproses lebih lanjut..</p>
+        <p>Widget Form bekerja bersama GlobalKey&lt;FormState&gt; untuk mengelola seluruh TextFormField di dalamnya secara terpusat.. Dengan memanggil method validate() pada FormState, seluruh validator pada setiap field akan dijalankan sekaligus, sehingga aplikasi dapat menampilkan pesan kesalahan apabila data yang dimasukkan tidak sesuai..</p>
+        <p>TextEditingController digunakan untuk membaca, mengatur, dan memantau nilai yang ada pada sebuah field input secara programatik.. Controller ini wajib di-dispose pada method dispose() untuk mencegah kebocoran memori (memory leak)..</p>
+    </div>
+
+    <div class="content-section">
+        <h2>III. Alat dan Bahan</h2>
+        <ul>
+            <li>Flutter SDK dan Dart</li>
+            <li>Visual Studio Code / Android Studio</li>
+            <li>Emulator / perangkat Android untuk menjalankan aplikasi</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>IV. Praktikum.</h2>
+        
+        <h3>A. Basic Form dengan TextFormField dan Validasi.</h3>
+        <p>Pada latihan ini dibuat form input Nama dan Email menggunakan TextFormField di dalam widget Form.. Validasi dilakukan melalui parameter validator pada masing-masing field: field Nama akan menampilkan pesan kesalahan apabila dikosongkan, sedangkan field Email akan menampilkan pesan kesalahan apabila kosong atau tidak mengandung karakter '@'.. Saat tombol Submit ditekan, method _submitForm() akan memanggil _formKey.currentState!.validate() untuk menjalankan seluruh validator; jika semua data valid, hasil input ditampilkan melalui SnackBar..</p>
+<pre><code>import 'package:flutter/material.dart';
+ 
+void main() => runApp(const MyApp());
+ 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  // 2411532017
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Basic Form TextFormField"),
+        ),
+        body: const MyFormText(),
+      ),
+    );
+  }
+}
+ 
+class MyFormText extends StatefulWidget {
+  const MyFormText({super.key});
+ 
+  @override
+  State&lt;MyFormText&gt; createState() => _MyFormTextState();
+}
+ 
+class _MyFormTextState extends State&lt;MyFormText&gt; {
+  final _formKey = GlobalKey&lt;FormState&gt;();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+ 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+ 
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      String name = _nameController.text;
+      String email = _emailController.text;
+ 
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Validasi $name, $email Berhasil')),
+      );
+    }
+  }
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: "Nama : ",
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Masukkan nama anda';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: "Email : ",
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Masukkan email anda';
+                }
+                if (!value.contains('@')) {
+                  return 'Email tidak valid';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _submitForm,
+                child: const Text('Submit'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}.</code></pre>
+        <div class="image-placeholder">Gambar 1. Tampilan kode dan hasil eksekusi Basic Form TextFormField.</div>
+
+        <h3>B. Basic Form dengan TextField dan onChanged.</h3>
+        <p>Latihan kedua menggunakan TextField biasa (bukan TextFormField) tanpa validasi Form.. Nilai input dipantau secara real-time melalui callback onChanged, yang mencetak teks yang sedang diketik ke konsol.. Ketika tombol 'Tampilkan nama' ditekan, nilai dari TextEditingController diambil dan ditampilkan melalui SnackBar.. Widget ini juga menunjukkan penggunaan properti dekorasi tambahan seperti hintText dan prefixIcon, serta kustomisasi gaya tombol dengan ElevatedButton.styleFrom()..</p>
+<pre><code>import 'package:flutter/material.dart';
+ 
+void main() => runApp(const MyApp());
+ 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  //2411532017
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Basic Form'),
+        ),
+        body: const MyForm(),
+      ),
+    );
+  }
+}
+//2411532017
+ 
+class MyForm extends StatefulWidget {
+  const MyForm({super.key});
+ 
+  @override
+  State&lt;MyForm&gt; createState() => _MyFormState();
+}
+ 
+//2411532017
+class _MyFormState extends State&lt;MyForm&gt; {
+  final TextEditingController _textEditingController =
+      TextEditingController();
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Masukkan nama anda :'),
+          const SizedBox(height: 10),
+          TextField(
+            decoration: const InputDecoration(
+              labelText: 'Nama Lengkap',
+              hintText: 'pe pe apaaaa???',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.person),
+            ),
+            controller: _textEditingController,
+            keyboardType: TextInputType.text,
+            onChanged: (text) {
+              print('Sedang mengetik teks : $text');
+            },
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              String inputText = _textEditingController.text;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Nama anda adalah $inputText')),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber,
+              foregroundColor: Colors.black,
+            ),
+            child: const Text('Tampilkan nama'),
+          ),
+        ],
+      ),
+    );
+  }
+}.</code></pre>
+        <div class="image-placeholder">Gambar 2. Tampilan kode dan hasil eksekusi Basic Form dengan onChanged.</div>
+
+        <h3>C. Studi Kasus: Kalkulator Kabataku.</h3>
+        <p>Studi kasus ini mengimplementasikan kalkulator sederhana dengan dua field input angka (Angka 1 dan Angka 2) serta empat tombol operasi: Tambah, Kurang, Kali, dan Bagi.. Method _hitung() mengubah teks input menjadi tipe double menggunakan double.tryParse(); apabila salah satu input tidak valid, ditampilkan pesan 'Masukkan angka yang valid!'.. Untuk operasi pembagian, program memeriksa terlebih dahulu apakah pembagi bernilai 0 agar tidak terjadi error pembagian oleh nol.. Hasil perhitungan ditampilkan pada bagian bawah layar dalam format 'a simbol b = hasil'..</p>
+<pre><code>import 'package:flutter/material.dart';
+ 
+void main() => runApp(const MyApp());
+ 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  // 2411532017
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Kalkulator Kabataku'),
+        ),
+        body: const KalkulatorForm(),
+      ),
+    );
+  }
+}
+// 2411532017
+ 
+class KalkulatorForm extends StatefulWidget {
+  const KalkulatorForm({super.key});
+ 
+  @override
+  State&lt;KalkulatorForm&gt; createState() => _KalkulatorFormState();
+}
+// 2411532017
+ 
+class _KalkulatorFormState extends State&lt;KalkulatorForm&gt; {
+  final TextEditingController _angka1Controller = TextEditingController();
+  final TextEditingController _angka2Controller = TextEditingController();
+ 
+  String _hasil = '';
+ 
+  @override
+  void dispose() {
+    _angka1Controller.dispose();
+    _angka2Controller.dispose();
+    super.dispose();
+  }
+ 
+  void _hitung(String operasi) {
+    double? a = double.tryParse(_angka1Controller.text);
+    double? b = double.tryParse(_angka2Controller.text);
+ 
+    if (a == null || b == null) {
+      setState(() {
+        _hasil = 'Masukkan angka yang valid!';
+      });
+      return;
+    }
+ 
+    double result = 0;
+    String simbol = '';
+ 
+    switch (operasi) {
+      case 'tambah':
+        result = a + b;
+        simbol = '+';
+        break;
+      case 'kurang':
+        result = a - b;
+        simbol = '-';
+        break;
+      case 'kali':
+        result = a * b;
+        simbol = 'x';
+        break;
+      case 'bagi':
+        if (b == 0) {
+          setState(() {
+            _hasil = 'Tidak bisa dibagi 0!';
+          });
+          return;
+        }
+        result = a / b;
+        simbol = ':';
+        break;
+    }
+ 
+    setState(() {
+      _hasil = '$a $simbol $b = $result';
+    });
+  }
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Angka 1 :'),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _angka1Controller,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Masukkan angka pertama',
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text('Angka 2 :'),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _angka2Controller,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Masukkan angka kedua',
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: () => _hitung('kali'),
+                child: const Text('Kali (x)'),
+              ),
+              ElevatedButton(
+                onPressed: () => _hitung('bagi'),
+                child: const Text('Bagi (:)'),
+              ),
+              ElevatedButton(
+                onPressed: () => _hitung('tambah'),
+                child: const Text('Tambah (+)'),
+              ),
+              ElevatedButton(
+                onPressed: () => _hitung('kurang'),
+                child: const Text('Kurang (-)'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Hasil : $_hasil',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+}.</code></pre>
+        <div class="image-placeholder">Gambar 3. Tampilan kode dan hasil eksekusi Kalkulator Kabataku.</div>
+    </div>
+
+    <div class="content-section">
+        <h2>V. Pembahasan.</h2>
+        <p>Dari ketiga latihan di atas terlihat perbedaan mendasar antara TextField dan TextFormField.. TextFormField lebih tepat digunakan ketika data input memerlukan validasi sebelum diproses, seperti pada latihan A, karena terintegrasi langsung dengan widget Form dan GlobalKey&lt;FormState&gt;.. Sebaliknya, TextField pada latihan B lebih sederhana dan cocok digunakan ketika validasi tidak diperlukan, namun tetap membutuhkan pemantauan nilai secara real-time melalui onChanged..</p>
+        <p>Pada studi kasus kalkulator, penanganan kesalahan (error handling) menjadi aspek penting, baik untuk memastikan input berupa angka yang valid maupun untuk mencegah pembagian oleh nol.. Penggunaan setState() pada setiap perubahan hasil perhitungan memastikan antarmuka pengguna selalu diperbarui sesuai dengan data terbaru..</p>
+    </div>
+
+    <div class="content-section">
+        <h2>VI. Kesimpulan.</h2>
+        <ul>
+            <li>TextFormField beserta Form dan GlobalKey&lt;FormState&gt; memudahkan penerapan validasi input secara terpusat..</li>
+            <li>TextEditingController berperan penting dalam mengambil, memantau, dan mengelola nilai input, serta wajib di-dispose untuk mencegah kebocoran memori..</li>
+            <li>Event handling seperti onChanged dan onPressed memungkinkan aplikasi merespons interaksi pengguna secara langsung..</li>
+            <li>Studi kasus kalkulator menunjukkan penerapan logika kondisional, penanganan error, dan pembaruan tampilan (setState) secara bersamaan dalam satu aplikasi Flutter sederhana..</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
