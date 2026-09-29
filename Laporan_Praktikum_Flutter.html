@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Praktikum Flutter — Widgets, Form, Login dan Repository</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#eef1f5;color:#20242a;font-family:"Segoe UI",Arial,sans-serif;line-height:1.65}
+.page{max-width:1100px;margin:0 auto;background:#fff;min-height:100vh}
+.cover{min-height:720px;padding:90px 90px 70px;display:flex;flex-direction:column;justify-content:space-between;border-bottom:1px solid #dfe3e8}
+.kicker{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#555;font-weight:700}
+.cover h1{font-family:Georgia,serif;font-size:43px;line-height:1.15;margin:30px 0 18px;color:#16191d}
+.cover h2{font-size:20px;font-weight:400;color:#555;margin:0;max-width:760px}
+.identity{margin-top:55px;border-left:4px solid #30343b;padding:15px 20px;color:#444}
+.identity div{margin:5px 0}
+.footer-cover{font-size:13px;color:#777}
+.toc,.section{padding:55px 75px}
+.toc{background:#f8f9fb;border-bottom:1px solid #e3e6ea}
+.toc h2,.section h2{font-family:Georgia,serif;color:#171a1e}
+.toc ol{columns:2;padding-left:25px}
+.toc li{margin:7px 0}
+.section{border-bottom:1px solid #e2e5e8}
+.section-head{display:flex;gap:18px;align-items:baseline;margin-bottom:20px}
+.section-head span{font-size:13px;font-weight:800;color:#6d737c;letter-spacing:1px}
+.section-head h2{font-size:28px;margin:0}
+p{color:#41464d}
+code{color: white;font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#01070d;padding:2px 5px;border-radius:4px}
+.code{background:#171a1f;color:#e8edf2;border-radius:8px;padding:20px;overflow:auto;font:13px/1.65 Consolas,"Courier New",monospace;white-space:pre-wrap;tab-size:2;margin:22px 0 30px;border:1px solid #30353c}
+.result-box{margin-top:20px}
+.result-label{font-size:12px;letter-spacing:1.5px;font-weight:800;color:#656b73;margin-bottom:9px}
+.mockup{max-width:720px;margin:auto;background:#fafafa;border:1px solid #d8dce1;border-radius:12px;padding:24px;box-shadow:0 5px 18px rgba(0,0,0,.05)}
+.mock-title{font-size:18px;font-weight:700;border-bottom:1px solid #ddd;padding-bottom:14px;margin-bottom:20px}
+.icon-circle{width:76px;height:76px;border-radius:50%;background:#e8e0f5;color:#5b2aa8;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:30px}
+.mock-heading{font-size:21px;font-weight:700;text-align:center;margin-bottom:22px}
+.input{background:white;border:1px solid #cfd4da;border-radius:7px;padding:12px 14px;margin:10px 0;color:#666}
+.button{color:#fff;text-align:center;border-radius:7px;padding:12px;font-weight:700;margin:18px 0}
+.purple{background:#5b2aa8}
+.orange{background:#e99b18}
+.link-line{text-align:center;color:#666;font-size:14px}
+.link-line b{color:#5b2aa8}
+.error,.success{padding:11px 14px;border-radius:6px;margin-top:16px;font-size:14px}
+.error{background:#fde8e8;color:#a52828}
+.success{background:#e7f7eb;color:#20723a}
+.mock-row{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.mock-row b{font-size:19px;display:block}
+.mock-row small,.account small{display:block;color:#707780}
+.avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:21px}
+.blue{background:#3d8fe5}
+.purple-bg{background:#5b2aa8}
+.balance{background:#16877d;color:white;border-radius:14px;padding:20px}
+.balance-top{display:flex;justify-content:space-between;color:#d8eeee}
+.balance strong{display:block;font-size:28px;margin:10px 0 2px}
+.balance small{color:#d8eeee}
+.note{margin-top:14px;background:#f0f2f4;border-left:3px solid #777;padding:11px 13px;font-size:13px;color:#5c6269}
+.data-row,.account{display:flex;gap:15px;align-items:center;padding:12px;border-bottom:1px solid #ddd}
+.data-row span{flex:1}
+.data-row b{font-family:Consolas,monospace}
+.account{padding:14px 0}
+.flow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0}
+.flow span{background:#fff;border:1px solid #ccd2d8;padding:8px 12px;border-radius:6px;font-family:Consolas,monospace;font-size:13px}
+.flow i{font-style:normal;color:#777}
+.info{padding:20px 24px;background:#f7f8fa;border-left:4px solid #555;margin:20px 0}
+.conclusion{background:#f8f9fb;padding:45px 75px}
+.conclusion h2{font-family:Georgia,serif}
+@media(max-width:750px){
+.cover{padding:55px 28px;min-height:600px}
+.cover h1{font-size:32px}
+.toc,.section,.conclusion{padding:38px 25px}
+.toc ol{columns:1}
+.section-head h2{font-size:23px}
+.code{font-size:11px}
+}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="cover">
+  <div>
+    <div class="kicker">Laporan Praktikum</div>
+    <h1>Implementasi Flutter:<br>Widgets, Form, Login & Repository</h1>
+    <h2>Dokumentasi kode program dan representasi hasil eksekusi aplikasi Flutter berdasarkan source code pada proyek praktikum.</h2>
+    <div class="identity">
+      <div><b>Nama:</b> Achmad Abidy R </div>
+      <div><b>NIM:</b> 2411532017 </div>
+    
+      <div><b>Mata Kuliah:</b> Pemrograman Aplikasi Mobile</div>
+    </div>
+  </div>
+  <div class="footer-cover">Universitas andalas <br>
+    program studi informatika
+    <br>Tahun Akademik: 2026</div>
+</header>
+
+<section class="toc">
+  <h2>Daftar Isi</h2>
+  <ol>
+    <li>Program Utama — main.dart</li>
+    <li>Praktikum Widgets — prak1.dart</li>
+    <li>Model Data Pengguna — user_model.dart</li>
+    <li>Repository Pengguna — user_repository.dart</li>
+    <li>Halaman Pendaftaran — register_screen.dart</li>
+    <li>Halaman Login — login_screen.dart</li>
+    <li>Halaman Admin — admin_screen.dart</li>
+    <li>Form Transaksi — add_transaction_screen.dart</li>
+    <li>Analisis dan Kesimpulan</li>
+  </ol>
+</section>
+
+<section class="section">
+  <div class="section-head"><span>00</span><h2>Pendahuluan</h2></div>
+  <p>Praktikum ini membahas implementasi antarmuka dan logika dasar aplikasi menggunakan Flutter dan bahasa Dart. Program menerapkan konsep widget, state management sederhana, form validation, navigasi antarhalaman, model data, serta repository berbasis <code>List&lt;User&gt;</code>.</p>
+  <div class="info"><b>Catatan dokumentasi:</b> bagian “Hasil / Representasi Tampilan” merupakan rekonstruksi tampilan berdasarkan kode sumber yang diberikan. Bagian tersebut bukan screenshot hasil runtime sehingga tidak mengklaim hasil yang tidak tersedia di dalam ZIP.</div>
+</section>
+
+
+<section class="section">
+  <div class="section-head"><span>01</span><h2>Program Utama — <code>main.dart</code></h2></div>
+  <p>File <code>main.dart</code> merupakan titik awal aplikasi. Fungsi <code>main()</code> menjalankan <code>MyApp</code>, kemudian aplikasi diarahkan ke halaman login sebagai halaman awal.</p>
+  <pre class="code"><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;login_screen.dart&#x27;;
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: &#x27;Login &amp; Admin App&#x27;,
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+      ),
+      home: const LoginScreen(), // Bisa diganti RegisterScreen() jika ingin mulai dari halaman daftar
+    );
+  }
+}</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Masuk</div>
+        
+    <div class="icon-circle">👤</div>
+    <div class="mock-heading">Masuk</div>
+    <div class="input">✉ &nbsp; Email</div>
+    <div class="input">🔒 &nbsp; Sandi</div>
+    <div class="button purple">Masuk</div>
+    <div class="link-line">Belum punya akun? <b>Daftar</b></div>
+  
+      </div>
+    </div>
+    
+</section>
+
+<section class="section">
+  <div class="section-head"><span>02</span><h2>Praktikum Widgets — <code>prak1.dart</code></h2></div>
+  <p>Program ini mendemonstrasikan struktur dasar Flutter menggunakan <code>MaterialApp</code>, <code>Scaffold</code>, <code>Padding</code>, <code>Column</code>, <code>Row</code>, <code>CircleAvatar</code>, <code>Card</code>, <code>Text</code>, dan <code>IconButton</code>. Selain itu terdapat perbedaan antara <em>StatelessWidget</em> dan <em>StatefulWidget</em>.</p>
+  <pre class="code"><code>import &#x27;package:flutter/material.dart&#x27;;
+
+void main() {
+  runApp(const MyApp());
+}
+
+// 1. WIDGET UTAMA
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: &#x27;Expense Tracker&#x27;,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const DashboardScreen(), // Halaman awal aplikasi
+    );
+  }
+}
+
+// 2. HALAMAN UTAMA (Scaffold)
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(&#x27;Praktikum 1: Widgets&#x27;),
+        backgroundColor: Colors.blue,
+      ),
+      // Padding untuk memberikan jarak dari tepi layar
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GreetingWidget(), // Memanggil StatelessWidget
+            SizedBox(height: 20), // Jarak vertikal
+            BalanceCardWidget(), // Memanggil StatefulWidget
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 3. STATELESS WIDGET (Sapaan Pengguna)
+class GreetingWidget extends StatelessWidget {
+  const GreetingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      children: [
+        // Ikon Profil
+        CircleAvatar(
+          radius: 24,
+          backgroundColor: Colors.blueAccent,
+          child: Icon(Icons.person, size: 30, color: Colors.white),
+        ),
+        SizedBox(width: 12),
+        // Teks Sapaan
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              &#x27;Halo, Budi&#x27;,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              &#x27;Selamat datang kembali!&#x27;,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// 4. STATEFUL WIDGET (Kartu Saldo dengan Toggle)
+class BalanceCardWidget extends StatefulWidget {
+  const BalanceCardWidget({super.key});
+
+  @override
+  State&lt;BalanceCardWidget&gt; createState() =&gt; _BalanceCardWidgetState();
+}
+
+class _BalanceCardWidgetState extends State&lt;BalanceCardWidget&gt; {
+  // Variabel State: Menyimpan status apakah saldo terlihat atau disensor
+  bool _isBalanceVisible = true;
+
+  // Fungsi untuk mengubah state
+  void _toggleVisibility() {
+    setState(() {
+      _isBalanceVisible = !_isBalanceVisible; // Membalik nilai boolean (true &lt;-&gt; false)
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      color: Colors.teal, // Warna latar belakang kartu
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Baris atas kartu: Teks &quot;Saldo Utama&quot; &amp; Tombol Ikon
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  &#x27;Saldo Utama&#x27;,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white70,
+                  ),
+                ),
+                // Tombol Mata
+                IconButton(
+                  icon: Icon(
+                    // Logika if-else singkat (Ternary Operator)
+                    _isBalanceVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.white,
+                  ),
+                  onPressed: _toggleVisibility, // Memanggil fungsi ubah state
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // Teks Nominal Saldo
+            Text(
+              // Logika if-else untuk menampilkan saldo atau sensor
+              _isBalanceVisible ? &#x27;Rp 5.000.000&#x27; : &#x27;Rp *********&#x27;,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              &#x27;nomor rekening 123456789&#x27;,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white70,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Praktikum 1: Widgets</div>
+        
+    <div class="mock-row">
+      <div class="avatar blue">👤</div>
+      <div><b>Halo, Budi</b><small>Selamat datang kembali!</small></div>
+    </div>
+    <div class="balance">
+      <div class="balance-top"><span>Saldo Utama</span><span>◉</span></div>
+      <strong>Rp 5.000.000</strong>
+      <small>nomor rekening 123456789</small>
+    </div>
+    <div class="note">Menekan ikon mata mengubah saldo menjadi <b>Rp *********</b>.</div>
+  
+      </div>
+    </div>
+    
+</section>
+
+<section class="section">
+  <div class="section-head"><span>03</span><h2>Model Data Pengguna — <code>user_model.dart</code></h2></div>
+  <p>Class <code>User</code> digunakan sebagai model sederhana yang menyimpan tiga atribut, yaitu username, email, dan password.</p>
+  <pre class="code"><code>// Model sederhana untuk menyimpan data satu akun
+class User {
+  final String username;
+  final String email;
+  final String password;
+
+  User({
+    required this.username,
+    required this.email,
+    required this.password,
+  });
+}</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Struktur Data User</div>
+        
+    <div class="data-row"><span>username</span><b>String</b></div>
+    <div class="data-row"><span>email</span><b>String</b></div>
+    <div class="data-row"><span>password</span><b>String</b></div>
+  
+      </div>
+    </div>
+    
+</section>
+
+<section class="section">
+  <div class="section-head"><span>04</span><h2>Repository Pengguna — <code>user_repository.dart</code></h2></div>
+  <p><code>UserRepository</code> berfungsi sebagai penyimpanan data pengguna selama aplikasi berjalan. Data disimpan pada <code>List&lt;User&gt;</code> di memori. Repository menyediakan operasi menambah pengguna, mengecek email, login, dan mengambil seluruh pengguna.</p>
+  <pre class="code"><code>import &#x27;user_model.dart&#x27;;
+
+// &quot;ArrayList&quot; di Dart/Flutter direpresentasikan dengan List&lt;T&gt;.
+// Static agar bisa diakses dari halaman manapun tanpa passing data manual.
+class UserRepository {
+  // Daftar akun yang sudah terdaftar (disimpan di memori, hilang saat app ditutup)
+  static final List&lt;User&gt; _users = [];
+
+  // Menambahkan akun baru hasil pendaftaran
+  static void addUser(User user) {
+    _users.add(user);
+  }
+
+  // Mengecek apakah email sudah pernah dipakai (opsional, untuk validasi daftar)
+  static bool isEmailTaken(String email) {
+    return _users.any((user) =&gt; user.email == email);
+  }
+
+  // Mencari user berdasarkan email + password (untuk proses login)
+  static User? login(String email, String password) {
+    try {
+      return _users.firstWhere(
+        (user) =&gt; user.email == email &amp;&amp; user.password == password,
+      );
+    } catch (e) {
+      return null; // tidak ditemukan -&gt; login gagal
+    }
+  }
+
+  // Mengambil seluruh akun (untuk ditampilkan di halaman Admin)
+  static List&lt;User&gt; getAllUsers() {
+    return _users;
+  }
+}
+</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Alur Repository</div>
+        
+    <div class="flow">
+      <span>Register</span><i>→</i><span>addUser()</span><i>→</i><span>List&lt;User&gt;</span>
+    </div>
+    <div class="flow">
+      <span>Login</span><i>→</i><span>login()</span><i>→</i><span>User / null</span>
+    </div>
+    <div class="note">Catatan: karena menggunakan penyimpanan memori, data akan hilang ketika aplikasi ditutup atau proses aplikasi dihentikan.</div>
+  
+      </div>
+    </div>
+    
+</section>
+
+<section class="section">
+  <div class="section-head"><span>05</span><h2>Halaman Pendaftaran — <code>register_screen.dart</code></h2></div>
+  <p>Halaman pendaftaran menggunakan <code>Form</code> dan beberapa <code>TextFormField</code>. Validasi dilakukan untuk username, email, dan password. Sistem juga memeriksa apakah email sudah terdaftar sebelum membuat objek <code>User</code>.</p>
+  <pre class="code"><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;user_model.dart&#x27;;
+import &#x27;user_repository.dart&#x27;;
+import &#x27;login_screen.dart&#x27;;
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State&lt;RegisterScreen&gt; createState() =&gt; _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State&lt;RegisterScreen&gt; {
+  final _formKey = GlobalKey&lt;FormState&gt;();
+
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleRegister() {
+    if (_formKey.currentState!.validate()) {
+      // Cek email sudah dipakai atau belum
+      if (UserRepository.isEmailTaken(_emailController.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(&quot;Email sudah terdaftar, gunakan email lain&quot;),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // Simpan akun baru ke dalam List (ArrayList)
+      final newUser = User(
+        username: _usernameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      UserRepository.addUser(newUser);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(&quot;Pendaftaran berhasil, silakan login&quot;),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Arahkan ke halaman Login setelah daftar berhasil
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) =&gt; const LoginScreen()),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(&quot;Daftar Akun&quot;),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Input Username
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: const InputDecoration(
+                    labelText: &quot;Username&quot;,
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person_outline),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return &quot;Username wajib diisi&quot;;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Input Email
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: &quot;Email&quot;,
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.email_outlined),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return &quot;Email wajib diisi&quot;;
+                    }
+                    if (!value.contains(&#x27;@&#x27;)) {
+                      return &quot;Format email tidak valid&quot;;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Input Password
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    labelText: &quot;Sandi&quot;,
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return &quot;Sandi wajib diisi&quot;;
+                    }
+                    if (value.length &lt; 6) {
+                      return &quot;Sandi minimal 6 karakter&quot;;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 32),
+
+                // Tombol Daftar
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  onPressed: _handleRegister,
+                  child: const Text(
+                    &quot;Daftar&quot;,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Link ke halaman Login
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(&quot;Sudah punya akun?&quot;),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =&gt; const LoginScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        &quot;Masuk&quot;,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Daftar Akun</div>
+        
+    <div class="input">👤 &nbsp; Username</div>
+    <div class="input">✉ &nbsp; Email</div>
+    <div class="input">🔒 &nbsp; Sandi</div>
+    <div class="button purple">Daftar</div>
+    <div class="link-line">Sudah punya akun? <b>Masuk</b></div>
+    <div class="success">Pendaftaran berhasil, silakan login</div>
+  
+      </div>
+    </div>
+    
+</section>
+
+<section class="section">
+  <div class="section-head"><span>06</span><h2>Halaman Login — <code>login_screen.dart</code></h2></div>
+  <p>Halaman login mengambil email dan password dari pengguna, kemudian memanggil <code>UserRepository.login()</code>. Jika data cocok, pengguna diarahkan ke halaman admin. Jika tidak cocok, sistem menampilkan pesan kesalahan.</p>
+  <pre class="code"><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;user_repository.dart&#x27;;
+import &#x27;register_screen.dart&#x27;;
+import &#x27;admin_screen.dart&#x27;;
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State&lt;LoginScreen&gt; createState() =&gt; _LoginScreenState();
+}
+
+class _LoginScreenState extends State&lt;LoginScreen&gt; {
+  final _formKey = GlobalKey&lt;FormState&gt;();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleLogin() {
+    if (_formKey.currentState!.validate()) {
+      final user = UserRepository.login(
+        _emailController.text,
+        _passwordController.text,
+      );
+
+      if (user != null) {
+        // Password benar -&gt; masuk ke halaman Admin
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) =&gt; const AdminScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(&quot;Email atau sandi salah&quot;),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Icon(Icons.account_circle, size: 80, color: Colors.deepPurple),
+                const SizedBox(height: 8),
+                const Text(
+                  &quot;Masuk&quot;,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 32),
+
+                // Input Email
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: &quot;Email&quot;,
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.email_outlined),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return &quot;Email wajib diisi&quot;;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Input Sandi
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    labelText: &quot;Sandi&quot;,
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return &quot;Sandi wajib diisi&quot;;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 32),
+
+                // Tombol Masuk
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  onPressed: _handleLogin,
+                  child: const Text(
+                    &quot;Masuk&quot;,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Link ke halaman Daftar
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(&quot;Belum punya akun?&quot;),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =&gt; const RegisterScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        &quot;Daftar&quot;,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Masuk</div>
+        
+    <div class="icon-circle">👤</div>
+    <div class="mock-heading">Masuk</div>
+    <div class="input">✉ &nbsp; Email</div>
+    <div class="input">🔒 &nbsp; Sandi &nbsp;&nbsp; ◉</div>
+    <div class="button purple">Masuk</div>
+    <div class="link-line">Belum punya akun? <b>Daftar</b></div>
+    <div class="error">Email atau sandi salah</div>
+  
+      </div>
+    </div>
+    
+</section>
+
+<section class="section">
+  <div class="section-head"><span>07</span><h2>Halaman Admin — <code>admin_screen.dart</code></h2></div>
+  <p>Halaman admin mengambil seluruh akun dari <code>UserRepository.getAllUsers()</code>. Data ditampilkan menggunakan <code>ListView.separated</code> dan setiap pengguna direpresentasikan sebagai <code>ListTile</code>.</p>
+  <pre class="code"><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;user_repository.dart&#x27;;
+import &#x27;login_screen.dart&#x27;;
+
+class AdminScreen extends StatelessWidget {
+  const AdminScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Ambil seluruh data akun yang tersimpan
+    final users = UserRepository.getAllUsers();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(&quot;Daftar Akun (Admin)&quot;),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) =&gt; const LoginScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: users.isEmpty
+          ? const Center(child: Text(&quot;Belum ada akun terdaftar&quot;))
+          : ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: users.length,
+              separatorBuilder: (context, index) =&gt; const Divider(),
+              itemBuilder: (context, index) {
+                final user = users[index];
+                return ListTile(
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.deepPurple,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  title: Text(
+                    user.username,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    &quot;Email: ${user.email}\nPassword: ${user.password}&quot;,
+                  ),
+                  isThreeLine: true,
+                );
+              },
+            ),
+    );
+  }
+}
+</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Daftar Akun (Admin)</div>
+        
+    <div class="account"><div class="avatar purple-bg">👤</div><div><b>Budi</b><small>Email: budi@email.com</small><small>Password: ******</small></div></div>
+    <div class="account"><div class="avatar purple-bg">👤</div><div><b>Andi</b><small>Email: andi@email.com</small><small>Password: ******</small></div></div>
+    <div class="note">Jika belum ada akun, tampilan yang dihasilkan adalah pesan “Belum ada akun terdaftar”.</div>
+  
+      </div>
+    </div>
+    
+</section>
+
+<section class="section">
+  <div class="section-head"><span>08</span><h2>Form Transaksi — <code>add_transaction_screen.dart</code></h2></div>
+  <p>Form transaksi menggunakan <code>TextEditingController</code>, validasi <code>Form</code>, dropdown kategori, serta date picker. Tanggal transaksi diisi otomatis dengan tanggal saat halaman dibuka dan dapat diubah melalui date picker.</p>
+  <pre class="code"><code>import &#x27;package:flutter/material.dart&#x27;;
+
+class AddTransactionScreen extends StatefulWidget {
+  const AddTransactionScreen({super.key});
+
+  @override
+  State&lt;AddTransactionScreen&gt; createState() =&gt; _AddTransactionScreenState();
+}
+
+class _AddTransactionScreenState extends State&lt;AddTransactionScreen&gt; {
+  // GlobalKey untuk mengontrol form dan memicu validasi
+  final _formKey = GlobalKey&lt;FormState&gt;();
+
+  // Controller untuk mengambil teks dari input
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _dateController = TextEditingController();
+
+  // State untuk Dropdown
+  String _selectedCategory = &#x27;Makanan&#x27;;
+  final List&lt;String&gt; _categories = [&#x27;Makanan&#x27;, &#x27;Transportasi&#x27;, &#x27;Hiburan&#x27;, &#x27;Lainnya&#x27;];
+
+  @override
+  void initState() {
+    super.initState();
+    // Isi otomatis tanggal hari ini saat halaman pertama dibuka
+    _dateController.text = &quot;${DateTime.now().toLocal()}&quot;.split(&#x27; &#x27;)[0];
+  }
+
+  @override
+  void dispose() {
+    // Bersihkan controller saat halaman ditutup untuk mencegah memory leak
+    _titleController.dispose();
+    _amountController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  // Fungsi untuk membuka date picker
+  Future&lt;void&gt; _pickDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        _dateController.text = &quot;${picked.toLocal()}&quot;.split(&#x27; &#x27;)[0];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(&quot;Catat Transaksi Baru&quot;),
+        backgroundColor: const Color.fromARGB(255, 223, 52, 29),
+        foregroundColor: Colors.white,
+      ),
+      // SingleChildScrollView mencegah error layout saat keyboard muncul
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Input 1: Judul Transaksi
+              TextFormField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  labelText: &quot;Judul Transaksi&quot;,
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.title),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return &quot;Judul transaksi tidak boleh kosong&quot;;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Input 2: Nominal Saldo (Keyboard Angka)
+              TextFormField(
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: &quot;Nominal (Rp)&quot;,
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.attach_money),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return &quot;Nominal wajib diisi&quot;;
+                  }
+                  if (int.tryParse(value) == null) {
+                    return &quot;Harus berupa angka bulat yang valid&quot;;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Input 3: Kategori Dropdown
+              DropdownButtonFormField&lt;String&gt;(
+                value: _selectedCategory,
+                decoration: const InputDecoration(
+                  labelText: &quot;Kategori&quot;,
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.category),
+                ),
+                items: _categories.map((String category) {
+                  return DropdownMenuItem&lt;String&gt;(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedCategory = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Input 4: Tanggal Transaksi
+              TextFormField(
+                controller: _dateController,
+                readOnly: true, // hanya bisa diisi lewat date picker
+                decoration: InputDecoration(
+                  labelText: &quot;Tanggal Transaksi&quot;,
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.calendar_today),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.edit_calendar),
+                    onPressed: () =&gt; _pickDate(context),
+                  ),
+                ),
+                onTap: () =&gt; _pickDate(context),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return &quot;Tanggal wajib diisi&quot;;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 32),
+
+              // Tombol Simpan
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 250, 163, 13),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                onPressed: () {
+                  // Jalankan validasi
+                  if (_formKey.currentState!.validate()) {
+                    // Jika lolos validasi, tampilkan pop-up SnackBar sukses
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          &#x27;Tersimpan: ${_titleController.text} (Rp ${_amountController.text}) - ${_dateController.text}&#x27;,
+                        ),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                },
+                child: const Text(
+                  &quot;Simpan Transaksi&quot;,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}</code></pre>
+  
+    <div class="result-box">
+      <div class="result-label">HASIL / REPRESENTASI TAMPILAN</div>
+      <div class="mockup">
+        <div class="mock-title">Catat Transaksi Baru</div>
+        
+    <div class="input">▣ &nbsp; Judul Transaksi</div>
+    <div class="input">Rp &nbsp; Nominal (Rp)</div>
+    <div class="input">▾ &nbsp; Kategori: Makanan</div>
+    <div class="input">▣ &nbsp; Tanggal Transaksi: tanggal hari ini</div>
+    <div class="button orange">Simpan Transaksi</div>
+    <div class="success">Tersimpan: contoh transaksi (Rp 100000) - tanggal</div>
+  
+      </div>
+    </div>
+    
+</section>
+
+
+<section class="conclusion">
+  <h2>Analisis dan Kesimpulan</h2>
+  <p>Berdasarkan source code, aplikasi telah menerapkan struktur dasar Flutter dengan pemisahan beberapa fungsi ke dalam file yang berbeda. <code>main.dart</code> berfungsi sebagai entry point, sedangkan <code>prak1.dart</code> memperlihatkan penggunaan widget dasar serta perubahan state menggunakan <code>setState()</code>.</p>
+  <p>Fitur autentikasi sederhana dibangun melalui kombinasi <code>RegisterScreen</code>, <code>LoginScreen</code>, <code>User</code>, dan <code>UserRepository</code>. Validasi input diterapkan pada proses pendaftaran dan login. Setelah autentikasi berhasil, pengguna diarahkan ke halaman admin untuk melihat data akun.</p>
+  <p>Selain itu, <code>AddTransactionScreen</code> menunjukkan implementasi form yang lebih kompleks melalui controller, dropdown kategori, date picker, dan validasi nominal. Secara keseluruhan, source code memperlihatkan penerapan konsep fundamental Flutter: widget tree, layout, state, form, navigasi, model, serta pengelolaan data sederhana.</p>
+  <p><b>Kesimpulan:</b> praktikum memberikan dasar implementasi aplikasi Flutter yang terdiri dari antarmuka pengguna, interaksi, validasi, dan pengelolaan data dalam memori. Untuk aplikasi produksi, penyimpanan password dan data pengguna sebaiknya tidak dilakukan dalam bentuk plaintext dan penyimpanan data perlu menggunakan persistence/database yang sesuai.</p>
+</section>
+
+<footer style="padding:30px 75px;text-align:center;color:#777;font-size:12px">
+  Laporan Praktikum Flutter — Dokumentasi Source Code
+</footer>
+</main>
+</body>
+</html>
