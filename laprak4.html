@@ -1,0 +1,1555 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laporan Praktikum 4 – Expense Tracker Flutter</title><style>
+body{font-family:"Times New Roman",Times,serif;line-height:1.6;max-width:880px;margin:0 auto;padding:32px 24px;color:#111;background:#fff;font-size:16px}
+h1,h2,h3{font-family:inherit}h2{margin-top:2.2em;border-bottom:2px solid #111;padding-bottom:4px;font-size:1.3em}h3{margin-top:1.6em;font-size:1.08em}
+p{text-align:justify}.cover{text-align:center;min-height:90vh;display:flex;flex-direction:column;justify-content:center;gap:6px;page-break-after:always}.cover h1{font-size:1.5em;margin:30px 0}
+table.id{margin:24px auto;border-collapse:collapse}table.id td{padding:2px 12px;text-align:left}
+pre{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px;overflow-x:auto;font-size:12.5px;line-height:1.45;margin:6px 0 18px}code{font-family:Consolas,"Courier New",monospace}
+pre.out{background:#0f172a;color:#e2e8f0;border-color:#0f172a}.fn{font-family:Consolas,monospace;font-size:13px;background:#e5e7eb;display:inline-block;padding:2px 10px;border-radius:4px 4px 0 0;margin-top:6px}.fn span{color:#555}
+.shots{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin:18px 0}figure{margin:0;text-align:center;font-size:14px}figcaption{margin-top:6px}
+.phone{width:250px;height:470px;border:7px solid #222;border-radius:26px;overflow:hidden;background:#fafafa;position:relative;text-align:left;font-family:Roboto,Arial,sans-serif;font-size:11px;color:#222}
+.bar{background:#f44336;color:#fff;padding:12px 12px;font-size:14px;font-weight:600}.scr{padding:10px}.hl{font-size:14px;font-weight:700;margin:2px 0 8px}.hl2{font-size:13px;font-weight:700;margin:8px 0 5px}
+.bc{background:#ff5252;color:#fff;border-radius:12px;padding:12px}.bc small{display:block;opacity:.8;font-size:11px}.bc big{font-size:20px;font-weight:700}
+.two{display:flex;gap:6px;margin-top:10px}.ob{flex:1;border:1px solid #999;border-radius:16px;text-align:center;padding:4px;color:#c62828}
+.card{background:#fff;box-shadow:0 1px 3px #0003;border-radius:4px}.li{display:flex;align-items:center;gap:6px;padding:5px 6px;border-bottom:1px solid #eee}.tx{flex:1;display:flex;flex-direction:column}.tx small{color:#777;font-size:9px}.li b{font-size:10px}
+.av{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px}.av.g{background:#4caf50}.av.o{background:#ff9800}.gr{color:#2e7d32}.rd{color:#d32f2f}
+.fab{position:absolute;right:12px;bottom:12px;width:40px;height:40px;border-radius:50%;background:#f44336;color:#fff;font-size:24px;display:grid;place-items:center}
+.fld{border:1px solid #888;border-radius:4px;padding:10px 8px 6px;margin-bottom:12px;position:relative;font-size:12px}.fld i{position:absolute;top:-7px;left:6px;background:#fafafa;padding:0 3px;font-size:9px;color:#666;font-style:normal}.fld.err{border-color:#d32f2f}.fld u{text-decoration:none;color:#d32f2f;font-size:10px;display:block;margin-top:14px}
+.btn{background:#f44336;color:#fff;text-align:center;padding:10px;border-radius:4px;margin-top:20px;font-size:13px}
+.det{text-align:center}.ic{font-size:48px}.det h3{margin:8px 0 2px;font-size:16px}.det h2{margin:2px 0;font-size:20px;border:0}.dr{display:flex;justify-content:space-between;margin:12px 4px;font-size:12px}.dr span{color:#777}
+table.t{border-collapse:collapse;width:100%;font-size:14px;margin:10px 0}table.t th,table.t td{border:1px solid #333;padding:5px 8px;text-align:left}table.t th{background:#eee}
+.note{border-left:4px solid #888;background:#f5f5f5;padding:8px 14px;font-size:14px;margin:14px 0}
+@media print{pre{white-space:pre-wrap;word-break:break-word;font-size:10px}.cover{min-height:95vh}}
+</style></head><body>
+<section class="cover"><div>LAPORAN PRAKTIKUM 4</div><div>PENGEMBANGAN APLIKASI MOBILE</div>
+<h1>IMPLEMENTASI APLIKASI PENCATAT KEUANGAN (<i>EXPENSE TRACKER</i>)<br>MENGGUNAKAN FRAMEWORK FLUTTER</h1>
+<table class="id" style="margin:10px auto"><tr><td>Nama</td><td>: Achmad Abidy</td></tr><tr><td>NIM</td><td>: 2411532017</td></tr><tr><td>Program Studi</td><td>: Informatika</td></tr></table>
+<br><b>DEPARTEMEN INFORMATIKA<br>FAKULTAS TEKNOLOGI INFORMASI<br>UNIVERSITAS ANDALAS<br>PADANG<br>2026</b></section>
+
+<h2>Abstrak</h2><p>Praktikum ini bertujuan mengimplementasikan aplikasi pencatat keuangan pribadi berbasis Flutter dengan bahasa pemrograman Dart. Aplikasi terdiri atas tiga halaman, yaitu dasbor, formulir pencatatan transaksi, dan rincian transaksi, yang didukung model data <code>Transaction</code>. Fitur utama meliputi perhitungan saldo dinamis, pemformatan mata uang Rupiah, validasi formulir, pemilihan tanggal, penyaringan berdasarkan jenis dan kategori, serta pengurutan berdasarkan tanggal dan nominal. Pengujian skenario menunjukkan bahwa seluruh fungsi berjalan sesuai spesifikasi: dari enam transaksi uji, saldo akhir yang dihasilkan sebesar Rp 8.186.000, sejalan dengan perhitungan manual. Praktikum membuktikan bahwa pengelolaan <i>state</i> dengan <code>StatefulWidget</code> dan <code>setState</code> memadai untuk aplikasi berskala kecil.</p>
+<p><b>Kata kunci:</b> Flutter, Dart, <i>state management</i>, validasi formulir, aplikasi keuangan.</p>
+
+<h2>BAB I. PENDAHULUAN</h2><h3>1.1 Latar Belakang</h3><p>Pencatatan keuangan pribadi yang sistematis membantu individu memantau arus kas dan mengendalikan pengeluaran. Perangkat bergerak merupakan medium yang tepat untuk pencatatan tersebut karena selalu tersedia bagi penggunanya. Flutter, kerangka kerja antarmuka lintas platform yang dikembangkan oleh Google, memungkinkan satu basis kode menghasilkan aplikasi untuk Android dan iOS dengan kinerja mendekati aplikasi native (Google, 2024). Oleh karena itu, praktikum ini memanfaatkan Flutter untuk membangun aplikasi <i>expense tracker</i> sederhana.</p>
+<h3>1.2 Tujuan</h3><p>Tujuan praktikum ini adalah: (1) memahami struktur proyek dan hierarki widget Flutter; (2) menerapkan pengelolaan <i>state</i> menggunakan <code>StatefulWidget</code>; (3) mengimplementasikan navigasi antarhalaman beserta pengembalian data; (4) membangun formulir dengan validasi masukan; dan (5) menerapkan logika penyaringan dan pengurutan data.</p>
+<h2>BAB II. LANDASAN TEORI</h2>
+<p><b>Flutter dan Dart.</b> Flutter membangun antarmuka sebagai pohon <i>widget</i> yang bersifat deklaratif; setiap perubahan <i>state</i> memicu pembangunan ulang bagian pohon yang terdampak. Dart merupakan bahasa berorientasi objek dengan sistem tipe yang aman terhadap <i>null</i> (<i>sound null safety</i>).</p>
+<p><b>StatelessWidget dan StatefulWidget.</b> <i>StatelessWidget</i> tidak menyimpan keadaan yang berubah, sedangkan <i>StatefulWidget</i> memiliki objek <code>State</code> yang diperbarui melalui <code>setState()</code> sehingga <code>build()</code> dipanggil ulang.</p>
+<p><b>Navigator.</b> Navigasi berbasis tumpukan (<i>stack</i>) dilakukan dengan <code>push</code> untuk membuka halaman dan <code>pop</code> untuk kembali; <code>pop</code> dapat membawa nilai balik yang diterima oleh pemanggil melalui <code>await</code>.</p>
+<p><b>Form dan Validasi.</b> Widget <code>Form</code> dengan <code>GlobalKey&lt;FormState&gt;</code> memungkinkan pemanggilan <code>validate()</code> terhadap seluruh <code>TextFormField</code> sekaligus.</p>
+
+<h2>BAB III. METODOLOGI DAN IMPLEMENTASI</h2>
+<h3>3.1 Alat dan Struktur Proyek</h3><p>Praktikum menggunakan Flutter SDK, bahasa Dart, dan <i>emulator</i>/perangkat Android. Struktur berkas pada direktori <code>lib/</code> disajikan pada Tabel 1.</p>
+<table class="t"><caption style="text-align:left"><b>Tabel 1.</b> Struktur berkas proyek</caption><tr><th>Berkas</th><th>Jenis Widget</th><th>Peran</th></tr><tr><td>main.dart</td><td>StatelessWidget</td><td>Titik masuk dan konfigurasi tema</td></tr><tr><td>transaction.dart</td><td>Kelas model</td><td>Representasi data transaksi</td></tr><tr><td>dashboard_screen.dart</td><td>StatefulWidget</td><td>Saldo, daftar, filter, dan urutan</td></tr><tr><td>add_transaction_screen.dart</td><td>StatefulWidget</td><td>Formulir input dan validasi</td></tr><tr><td>transaction_detail_screen.dart</td><td>StatelessWidget</td><td>Rincian satu transaksi</td></tr></table>
+<h3>3.2 Model data Transaction</h3><p>Kelas <code>Transaction</code> merupakan model data berupa objek bernilai (<i>value object</i>) dengan lima atribut <code>final</code> (immutable): <code>title</code>, <code>amount</code>, <code>isIncome</code>, <code>category</code>, dan <code>date</code>. Seluruh atribut ditandai <code>required</code> sehingga objek tidak dapat dibentuk dengan data yang tidak lengkap.</p><div class="fn">transaction.dart <span>(15 baris)</span></div><pre><code>class Transaction {
+  final String title;
+  final int amount;
+  final bool isIncome;
+  final String category;
+  final DateTime date;
+
+  Transaction({
+    required this.title,
+    required this.amount,
+    required this.isIncome,
+    required this.category,
+    required this.date,
+  });
+}</code></pre><h3>3.3 Titik masuk aplikasi</h3><p>Fungsi <code>main()</code> memanggil <code>runApp()</code> dengan widget akar <code>MyApp</code> (<code>StatelessWidget</code>). <code>MaterialApp</code> mengonfigurasi judul, tema berbasis <code>Colors.red</code>, serta menetapkan <code>DashboardScreen</code> sebagai halaman awal.</p><div class="fn">main.dart <span>(22 baris)</span></div><pre><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;dashboard_screen.dart&#x27;;
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: &#x27;Expense Tracker&#x27;,
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
+      home: const DashboardScreen(),
+    );
+  }
+}</code></pre><h3>3.4 Halaman Dashboard (StatefulWidget)</h3><p>Halaman ini mengelola <i>state</i> berupa daftar transaksi, filter jenis, filter kategori, dan kriteria pengurutan. Saldo dihitung melalui <i>getter</i> <code>currentBalance</code> (saldo awal Rp 5.000.000 ditambah pemasukan dan dikurangi pengeluaran). <i>Getter</i> <code>filteredTransactions</code> menerapkan tiga tahap berurutan: penyaringan jenis, penyaringan kategori, dan pengurutan (tanggal terbaru, nominal terkecil, nominal terbesar). Fungsi <code>formatRupiah()</code> menyisipkan pemisah ribuan secara iteratif dari digit paling kanan. Filter dan pengurutan disajikan melalui <code>showModalBottomSheet</code>; <code>StatefulBuilder</code> digunakan agar pilihan sementara dapat diperbarui tanpa membangun ulang seluruh halaman sebelum tombol “Terapkan” ditekan. Navigasi ke halaman tambah dan detail memanfaatkan <code>Navigator.push</code>, dengan objek <code>Transaction</code> dikembalikan melalui <code>Navigator.pop</code>.</p><div class="fn">dashboard_screen.dart <span>(794 baris)</span></div><pre><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;transaction.dart&#x27;;
+import &#x27;add_transaction_screen.dart&#x27;;
+import &#x27;transaction_detail_screen.dart&#x27;;
+
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  State&lt;DashboardScreen&gt; createState() =&gt;
+      _DashboardScreenState();
+}
+
+class _DashboardScreenState
+    extends State&lt;DashboardScreen&gt; {
+  final int initialBalance = 5000000;
+
+  final List&lt;Transaction&gt; transactions = [];
+
+  String selectedType = &#x27;Semua&#x27;;
+  String selectedCategory = &#x27;Semua Kategori&#x27;;
+
+  String selectedSort = &#x27;Tanggal terbaru&#x27;;
+
+  final List&lt;String&gt; categories = [
+    &#x27;Semua Kategori&#x27;,
+    &#x27;Makanan&#x27;,
+    &#x27;Transportasi&#x27;,
+    &#x27;Belanja&#x27;,
+    &#x27;Tagihan&#x27;,
+    &#x27;Hiburan&#x27;,
+    &#x27;Kesehatan&#x27;,
+    &#x27;Pendidikan&#x27;,
+    &#x27;Gaji&#x27;,
+    &#x27;Bonus&#x27;,
+    &#x27;Other&#x27;,
+  ];
+
+  int get currentBalance {
+    int balance = initialBalance;
+
+    for (final transaction in transactions) {
+      if (transaction.isIncome) {
+        balance += transaction.amount;
+      } else {
+        balance -= transaction.amount;
+      }
+    }
+
+    return balance;
+  }
+
+  String formatRupiah(int value) {
+    final bool negative = value &lt; 0;
+
+    final String number =
+        value.abs().toString();
+
+    String result = &#x27;&#x27;;
+    int counter = 0;
+
+    for (int i = number.length - 1;
+        i &gt;= 0;
+        i--) {
+      result = number[i] + result;
+      counter++;
+
+      if (counter == 3 &amp;&amp; i != 0) {
+        result = &#x27;.$result&#x27;;
+        counter = 0;
+      }
+    }
+
+    return &#x27;${negative ? &#x27;-&#x27; : &#x27;&#x27;}Rp $result&#x27;;
+  }
+
+  Future&lt;void&gt; _addTransaction() async {
+    final Transaction? result =
+        await Navigator.push&lt;Transaction&gt;(
+      context,
+      MaterialPageRoute(
+        builder: (context) =&gt;
+            const AddTransactionScreen(),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        transactions.add(result);
+      });
+    }
+  }
+
+  List&lt;Transaction&gt; get filteredTransactions {
+    List&lt;Transaction&gt; result =
+        List.from(transactions);
+
+    // FILTER JENIS TRANSAKSI
+    if (selectedType == &#x27;Pemasukan&#x27;) {
+      result = result
+          .where(
+            (transaction) =&gt;
+                transaction.isIncome,
+          )
+          .toList();
+    } else if (selectedType ==
+        &#x27;Pengeluaran&#x27;) {
+      result = result
+          .where(
+            (transaction) =&gt;
+                !transaction.isIncome,
+          )
+          .toList();
+    }
+
+    // FILTER KATEGORI
+    if (selectedCategory !=
+        &#x27;Semua Kategori&#x27;) {
+      result = result
+          .where(
+            (transaction) =&gt;
+                transaction.category ==
+                selectedCategory,
+          )
+          .toList();
+    }
+
+    // SORTING
+    if (selectedSort ==
+        &#x27;Tanggal terbaru&#x27;) {
+      result.sort(
+        (a, b) =&gt; b.date.compareTo(a.date),
+      );
+    }
+
+    if (selectedSort ==
+        &#x27;Nominal terkecil&#x27;) {
+      result.sort(
+        (a, b) =&gt;
+            a.amount.compareTo(b.amount),
+      );
+    }
+
+    if (selectedSort ==
+        &#x27;Nominal terbesar&#x27;) {
+      result.sort(
+        (a, b) =&gt;
+            b.amount.compareTo(a.amount),
+      );
+    }
+
+    return result;
+  }
+
+  IconData _getCategoryIcon(
+      String category) {
+    switch (category) {
+      case &#x27;Makanan&#x27;:
+        return Icons.restaurant;
+
+      case &#x27;Transportasi&#x27;:
+        return Icons.directions_car;
+
+      case &#x27;Belanja&#x27;:
+        return Icons.shopping_cart;
+
+      case &#x27;Tagihan&#x27;:
+        return Icons.receipt_long;
+
+      case &#x27;Hiburan&#x27;:
+        return Icons.movie;
+
+      case &#x27;Kesehatan&#x27;:
+        return Icons.local_hospital;
+
+      case &#x27;Pendidikan&#x27;:
+        return Icons.school;
+
+      case &#x27;Gaji&#x27;:
+        return Icons.work;
+
+      case &#x27;Bonus&#x27;:
+        return Icons.card_giftcard;
+
+      case &#x27;Other&#x27;:
+      default:
+        return Icons.more_horiz;
+    }
+  }
+
+  void _showFilterDialog() {
+    String tempType = selectedType;
+    String tempCategory =
+        selectedCategory;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+
+      builder: (context) {
+        return StatefulBuilder(
+          builder:
+              (context, setModalState) {
+            return Padding(
+              padding:
+                  const EdgeInsets.all(20),
+
+              child: Column(
+                mainAxisSize:
+                    MainAxisSize.min,
+
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+
+                children: [
+                  const Text(
+                    &#x27;Filter Transaksi&#x27;,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  const Text(
+                    &#x27;Jenis Transaksi&#x27;,
+                    style: TextStyle(
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+
+                  RadioListTile&lt;String&gt;(
+                    title:
+                        const Text(&#x27;Semua&#x27;),
+                    value: &#x27;Semua&#x27;,
+                    groupValue:
+                        tempType,
+                    onChanged: (value) {
+                      setModalState(() {
+                        tempType = value!;
+                      });
+                    },
+                  ),
+
+                  RadioListTile&lt;String&gt;(
+                    title: const Text(
+                      &#x27;Pemasukan&#x27;,
+                    ),
+                    value: &#x27;Pemasukan&#x27;,
+                    groupValue:
+                        tempType,
+                    onChanged: (value) {
+                      setModalState(() {
+                        tempType = value!;
+                      });
+                    },
+                  ),
+
+                  RadioListTile&lt;String&gt;(
+                    title: const Text(
+                      &#x27;Pengeluaran&#x27;,
+                    ),
+                    value: &#x27;Pengeluaran&#x27;,
+                    groupValue:
+                        tempType,
+                    onChanged: (value) {
+                      setModalState(() {
+                        tempType = value!;
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  const Text(
+                    &#x27;Kategori&#x27;,
+                    style: TextStyle(
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+
+                  DropdownButtonFormField&lt;
+                      String&gt;(
+                    initialValue:
+                        tempCategory,
+
+                    decoration:
+                        const InputDecoration(
+                      border:
+                          OutlineInputBorder(),
+                    ),
+
+                    items: categories.map(
+                      (category) {
+                        return DropdownMenuItem&lt;
+                            String&gt;(
+                          value: category,
+                          child:
+                              Row(
+                            children: [
+                              Icon(
+                                _getCategoryIcon(
+                                  category,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                category,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ).toList(),
+
+                    onChanged: (value) {
+                      setModalState(() {
+                        tempCategory =
+                            value!;
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    width: double.infinity,
+
+                    child:
+                        ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          selectedType =
+                              tempType;
+
+                          selectedCategory =
+                              tempCategory;
+                        });
+
+                        Navigator.pop(
+                          context,
+                        );
+                      },
+
+                      child: const Text(
+                        &#x27;Terapkan&#x27;,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showSortDialog() {
+    showModalBottomSheet(
+      context: context,
+
+      builder: (context) {
+        return Padding(
+          padding:
+              const EdgeInsets.all(20),
+
+          child: Column(
+            mainAxisSize:
+                MainAxisSize.min,
+
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+
+            children: [
+              const Text(
+                &#x27;Urutkan Transaksi&#x27;,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight:
+                      FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              ListTile(
+                leading: const Icon(
+                  Icons.calendar_today,
+                ),
+
+                title: const Text(
+                  &#x27;Tanggal terbaru&#x27;,
+                ),
+
+                trailing:
+                    selectedSort ==
+                            &#x27;Tanggal terbaru&#x27;
+                        ? const Icon(
+                            Icons.check,
+                          )
+                        : null,
+
+                onTap: () {
+                  setState(() {
+                    selectedSort =
+                        &#x27;Tanggal terbaru&#x27;;
+                  });
+
+                  Navigator.pop(context);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(
+                  Icons.arrow_upward,
+                ),
+
+                title: const Text(
+                  &#x27;Nominal terkecil&#x27;,
+                ),
+
+                trailing:
+                    selectedSort ==
+                            &#x27;Nominal terkecil&#x27;
+                        ? const Icon(
+                            Icons.check,
+                          )
+                        : null,
+
+                onTap: () {
+                  setState(() {
+                    selectedSort =
+                        &#x27;Nominal terkecil&#x27;;
+                  });
+
+                  Navigator.pop(context);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(
+                  Icons.arrow_downward,
+                ),
+
+                title: const Text(
+                  &#x27;Nominal terbesar&#x27;,
+                ),
+
+                trailing:
+                    selectedSort ==
+                            &#x27;Nominal terbesar&#x27;
+                        ? const Icon(
+                            Icons.check,
+                          )
+                        : null,
+
+                onTap: () {
+                  setState(() {
+                    selectedSort =
+                        &#x27;Nominal terbesar&#x27;;
+                  });
+
+                  Navigator.pop(context);
+                },
+              ),
+
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return &#x27;${date.day.toString().padLeft(2, &#x27;0&#x27;)}/&#x27;
+        &#x27;${date.month.toString().padLeft(2, &#x27;0&#x27;)}/&#x27;
+        &#x27;${date.year}&#x27;;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final displayedTransactions =
+        filteredTransactions;
+
+    return Scaffold(
+      appBar: AppBar(
+        title:
+            const Text(&#x27;Dashboard Keuangan&#x27;),
+
+        backgroundColor: Colors.red,
+
+        foregroundColor:
+            Colors.white,
+      ),
+
+      floatingActionButton:
+          FloatingActionButton(
+        backgroundColor:
+            Colors.red,
+
+        foregroundColor:
+            Colors.white,
+
+        onPressed:
+            _addTransaction,
+
+        child:
+            const Icon(Icons.add),
+      ),
+
+      body: SingleChildScrollView(
+        padding:
+            const EdgeInsets.all(16),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+            const Text(
+              &#x27;Halo, Budi&#x27;,
+
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            _buildBalanceCard(),
+
+            const SizedBox(height: 20),
+
+            Row(
+              children: [
+                Expanded(
+                  child:
+                      OutlinedButton.icon(
+                    onPressed:
+                        _showFilterDialog,
+
+                    icon: const Icon(
+                      Icons.filter_list,
+                    ),
+
+                    label:
+                        const Text(
+                      &#x27;Filter&#x27;,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 10),
+
+                Expanded(
+                  child:
+                      OutlinedButton.icon(
+                    onPressed:
+                        _showSortDialog,
+
+                    icon: const Icon(
+                      Icons.sort,
+                    ),
+
+                    label:
+                        const Text(
+                      &#x27;Urutkan&#x27;,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+
+            if (selectedType !=
+                    &#x27;Semua&#x27; ||
+                selectedCategory !=
+                    &#x27;Semua Kategori&#x27;)
+              Wrap(
+                spacing: 8,
+                children: [
+                  if (selectedType !=
+                      &#x27;Semua&#x27;)
+                    Chip(
+                      label: Text(
+                        selectedType,
+                      ),
+                    ),
+
+                  if (selectedCategory !=
+                      &#x27;Semua Kategori&#x27;)
+                    Chip(
+                      label: Text(
+                        selectedCategory,
+                      ),
+                    ),
+                ],
+              ),
+
+            const SizedBox(height: 10),
+
+            const Text(
+              &#x27;Transaksi&#x27;,
+
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            _buildTransactionList(
+              displayedTransactions,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBalanceCard() {
+    return Card(
+      elevation: 4,
+
+      color:
+          Colors.redAccent,
+
+      shape:
+          RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(16),
+      ),
+
+      child: Padding(
+        padding:
+            const EdgeInsets.all(20),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+            const Text(
+              &#x27;Saldo Utama&#x27;,
+
+              style: TextStyle(
+                fontSize: 16,
+                color:
+                    Colors.white70,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            Text(
+              formatRupiah(
+                currentBalance,
+              ),
+
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight:
+                    FontWeight.bold,
+                color:
+                    Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransactionList(
+      List&lt;Transaction&gt; data) {
+    if (data.isEmpty) {
+      return const Card(
+        child: Padding(
+          padding:
+              EdgeInsets.all(24),
+
+          child: Center(
+            child: Text(
+              &#x27;Tidak ada transaksi&#x27;,
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Card(
+      elevation: 2,
+
+      child: ListView.separated(
+        shrinkWrap: true,
+
+        physics:
+            const NeverScrollableScrollPhysics(),
+
+        itemCount:
+            data.length,
+
+        separatorBuilder:
+            (context, index) {
+          return const Divider(
+            height: 1,
+          );
+        },
+
+        itemBuilder:
+            (context, index) {
+          final transaction =
+              data[index];
+
+          return ListTile(
+            leading:
+                CircleAvatar(
+              backgroundColor:
+                  transaction.isIncome
+                      ? Colors.green
+                      : Colors.orange,
+
+              child: Icon(
+                _getCategoryIcon(
+                  transaction.category,
+                ),
+
+                color:
+                    Colors.white,
+              ),
+            ),
+
+            title: Text(
+              transaction.title,
+            ),
+
+            subtitle: Text(
+              &#x27;${transaction.category} • &#x27;
+              &#x27;${_formatDate(transaction.date)}&#x27;,
+            ),
+
+            trailing: Text(
+              &#x27;${transaction.isIncome ? &#x27;+&#x27; : &#x27;-&#x27;} &#x27;
+              &#x27;${formatRupiah(transaction.amount)}&#x27;,
+
+              style: TextStyle(
+                color:
+                    transaction.isIncome
+                        ? Colors.green
+                        : Colors.red,
+
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            onTap: () {
+              Navigator.push(
+                context,
+
+                MaterialPageRoute(
+                  builder:
+                      (context) =&gt;
+                          TransactionDetailScreen(
+                    transaction:
+                        transaction,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}</code></pre><h3>3.5 Halaman Tambah Transaksi</h3><p>Halaman ini memakai <code>Form</code> dengan <code>GlobalKey&lt;FormState&gt;</code> untuk validasi. Terdapat tiga <code>TextEditingController</code> (judul, nominal, tanggal) yang dibebaskan pada <code>dispose()</code> guna mencegah kebocoran memori. Input nominal diformat otomatis dengan pemisah ribuan pada setiap perubahan teks (<code>_formatAmount</code>) dan dikonversi kembali ke bilangan bulat melalui <code>parseAmount</code> berbasis ekspresi reguler <code>[^0-9]</code>. Tanggal dipilih menggunakan <code>showDatePicker</code> pada rentang 2020–2030. Validator memastikan judul tidak kosong, nominal lebih dari nol, dan tanggal telah dipilih.</p><div class="fn">add_transaction_screen.dart <span>(413 baris)</span></div><pre><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;transaction.dart&#x27;;
+
+class AddTransactionScreen extends StatefulWidget {
+  const AddTransactionScreen({super.key});
+
+  @override
+  State&lt;AddTransactionScreen&gt; createState() =&gt;
+      _AddTransactionScreenState();
+}
+
+class _AddTransactionScreenState
+    extends State&lt;AddTransactionScreen&gt; {
+  final _formKey = GlobalKey&lt;FormState&gt;();
+
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _dateController = TextEditingController();
+
+  DateTime? selectedDate;
+
+  String transactionType = &#x27;Pengeluaran&#x27;;
+  String selectedCategory = &#x27;Makanan&#x27;;
+
+  final List&lt;Map&lt;String, dynamic&gt;&gt; categories = [
+    {
+      &#x27;name&#x27;: &#x27;Makanan&#x27;,
+      &#x27;icon&#x27;: Icons.restaurant,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Transportasi&#x27;,
+      &#x27;icon&#x27;: Icons.directions_car,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Belanja&#x27;,
+      &#x27;icon&#x27;: Icons.shopping_cart,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Tagihan&#x27;,
+      &#x27;icon&#x27;: Icons.receipt_long,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Hiburan&#x27;,
+      &#x27;icon&#x27;: Icons.movie,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Kesehatan&#x27;,
+      &#x27;icon&#x27;: Icons.local_hospital,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Pendidikan&#x27;,
+      &#x27;icon&#x27;: Icons.school,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Gaji&#x27;,
+      &#x27;icon&#x27;: Icons.work,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Bonus&#x27;,
+      &#x27;icon&#x27;: Icons.card_giftcard,
+    },
+    {
+      &#x27;name&#x27;: &#x27;Other&#x27;,
+      &#x27;icon&#x27;: Icons.more_horiz,
+    },
+  ];
+
+  String formatRupiah(int value) {
+    if (value == 0) {
+      return &#x27;0&#x27;;
+    }
+
+    final String number = value.toString();
+
+    String result = &#x27;&#x27;;
+    int counter = 0;
+
+    for (int i = number.length - 1; i &gt;= 0; i--) {
+      result = number[i] + result;
+      counter++;
+
+      if (counter == 3 &amp;&amp; i != 0) {
+        result = &#x27;.$result&#x27;;
+        counter = 0;
+      }
+    }
+
+    return result;
+  }
+
+  int parseAmount(String value) {
+    final cleanValue =
+        value.replaceAll(RegExp(r&#x27;[^0-9]&#x27;), &#x27;&#x27;);
+
+    if (cleanValue.isEmpty) {
+      return 0;
+    }
+
+    return int.parse(cleanValue);
+  }
+
+  void _formatAmount() {
+    final amount =
+        parseAmount(_amountController.text);
+
+    final formatted =
+        formatRupiah(amount);
+
+    _amountController.value =
+        TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(
+        offset: formatted.length,
+      ),
+    );
+  }
+
+  Future&lt;void&gt; _selectDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate:
+          selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+
+    if (picked != null) {
+      setState(() {
+        selectedDate = picked;
+
+        _dateController.text =
+            &#x27;${picked.day.toString().padLeft(2, &#x27;0&#x27;)}/&#x27;
+            &#x27;${picked.month.toString().padLeft(2, &#x27;0&#x27;)}/&#x27;
+            &#x27;${picked.year}&#x27;;
+      });
+    }
+  }
+
+  void _saveTransaction() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final amount =
+        parseAmount(_amountController.text);
+
+    final transaction = Transaction(
+      title: _titleController.text,
+      amount: amount,
+      isIncome:
+          transactionType == &#x27;Pemasukan&#x27;,
+      category: selectedCategory,
+      date: selectedDate!,
+    );
+
+    Navigator.pop(
+      context,
+      transaction,
+    );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _dateController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(&#x27;Catat Transaksi&#x27;),
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: Form(
+          key: _formKey,
+
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.stretch,
+
+              children: [
+                TextFormField(
+                  controller: _titleController,
+
+                  decoration:
+                      const InputDecoration(
+                    labelText: &#x27;Judul&#x27;,
+                    border:
+                        OutlineInputBorder(),
+                  ),
+
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty) {
+                      return &#x27;Judul wajib diisi&#x27;;
+                    }
+
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField&lt;String&gt;(
+                  initialValue: transactionType,
+
+                  decoration:
+                      const InputDecoration(
+                    labelText:
+                        &#x27;Jenis Transaksi&#x27;,
+                    border:
+                        OutlineInputBorder(),
+                  ),
+
+                  items: const [
+                    DropdownMenuItem(
+                      value: &#x27;Pemasukan&#x27;,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_downward,
+                            color: Colors.green,
+                          ),
+                          SizedBox(width: 10),
+                          Text(&#x27;Pemasukan&#x27;),
+                        ],
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: &#x27;Pengeluaran&#x27;,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_upward,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 10),
+                          Text(&#x27;Pengeluaran&#x27;),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  onChanged: (value) {
+                    setState(() {
+                      transactionType = value!;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller:
+                      _amountController,
+
+                  keyboardType:
+                      TextInputType.number,
+
+                  onChanged: (value) {
+                    _formatAmount();
+                  },
+
+                  decoration:
+                      const InputDecoration(
+                    labelText: &#x27;Nominal&#x27;,
+                    prefixText: &#x27;Rp &#x27;,
+                    border:
+                        OutlineInputBorder(),
+                  ),
+
+                  validator: (value) {
+                    final amount =
+                        parseAmount(
+                      value ?? &#x27;&#x27;,
+                    );
+
+                    if (amount &lt;= 0) {
+                      return &#x27;Nominal wajib diisi&#x27;;
+                    }
+
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField&lt;String&gt;(
+                  initialValue:
+                      selectedCategory,
+
+                  decoration:
+                      const InputDecoration(
+                    labelText: &#x27;Kategori&#x27;,
+                    border:
+                        OutlineInputBorder(),
+                  ),
+
+                  items: categories.map(
+                    (category) {
+                      return DropdownMenuItem&lt;
+                          String&gt;(
+                        value:
+                            category[&#x27;name&#x27;],
+
+                        child: Row(
+                          children: [
+                            Icon(
+                              category[&#x27;icon&#x27;],
+                              color: Colors.red,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              category[&#x27;name&#x27;],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ).toList(),
+
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategory =
+                          value!;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller:
+                      _dateController,
+
+                  readOnly: true,
+
+                  onTap: _selectDate,
+
+                  decoration:
+                      InputDecoration(
+                    labelText:
+                        &#x27;Tanggal Transaksi&#x27;,
+
+                    border:
+                        const OutlineInputBorder(),
+
+                    suffixIcon:
+                        IconButton(
+                      icon: const Icon(
+                        Icons.calendar_month,
+                      ),
+                      onPressed:
+                          _selectDate,
+                    ),
+                  ),
+
+                  validator: (value) {
+                    if (selectedDate ==
+                        null) {
+                      return &#x27;Tanggal wajib diisi&#x27;;
+                    }
+
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 32),
+
+                ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Colors.red,
+                    foregroundColor:
+                        Colors.white,
+                    padding:
+                        const EdgeInsets
+                            .symmetric(
+                      vertical: 16,
+                    ),
+                  ),
+
+                  onPressed:
+                      _saveTransaction,
+
+                  child: const Text(
+                    &#x27;Simpan&#x27;,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}</code></pre><h3>3.6 Halaman Detail Transaksi</h3><p>Halaman <code>StatelessWidget</code> ini menerima objek <code>Transaction</code> melalui konstruktor dan menampilkannya secara <i>read-only</i>: ikon kategori, judul, nominal berwarna (hijau untuk pemasukan, merah untuk pengeluaran), serta baris rincian jenis, kategori, tanggal, dan status yang dibangun oleh <code>_buildDetailRow</code>.</p><div class="fn">transaction_detail_screen.dart <span>(229 baris)</span></div><pre><code>import &#x27;package:flutter/material.dart&#x27;;
+import &#x27;transaction.dart&#x27;;
+
+class TransactionDetailScreen
+    extends StatelessWidget {
+  final Transaction transaction;
+
+  const TransactionDetailScreen({
+    super.key,
+    required this.transaction,
+  });
+
+  String formatRupiah(int value) {
+    final number =
+        value.toString();
+
+    String result = &#x27;&#x27;;
+    int counter = 0;
+
+    for (int i = number.length - 1;
+        i &gt;= 0;
+        i--) {
+      result =
+          number[i] + result;
+
+      counter++;
+
+      if (counter == 3 &amp;&amp;
+          i != 0) {
+        result =
+            &#x27;.$result&#x27;;
+
+        counter = 0;
+      }
+    }
+
+    return &#x27;Rp $result&#x27;;
+  }
+
+  String formatDate(DateTime date) {
+    return &#x27;${date.day.toString().padLeft(2, &#x27;0&#x27;)}/&#x27;
+        &#x27;${date.month.toString().padLeft(2, &#x27;0&#x27;)}/&#x27;
+        &#x27;${date.year}&#x27;;
+  }
+
+  IconData getCategoryIcon(
+      String category) {
+    switch (category) {
+      case &#x27;Makanan&#x27;:
+        return Icons.restaurant;
+
+      case &#x27;Transportasi&#x27;:
+        return Icons.directions_car;
+
+      case &#x27;Belanja&#x27;:
+        return Icons.shopping_cart;
+
+      case &#x27;Tagihan&#x27;:
+        return Icons.receipt_long;
+
+      case &#x27;Hiburan&#x27;:
+        return Icons.movie;
+
+      case &#x27;Kesehatan&#x27;:
+        return Icons.local_hospital;
+
+      case &#x27;Pendidikan&#x27;:
+        return Icons.school;
+
+      case &#x27;Gaji&#x27;:
+        return Icons.work;
+
+      case &#x27;Bonus&#x27;:
+        return Icons.card_giftcard;
+
+      default:
+        return Icons.more_horiz;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isIncome =
+        transaction.isIncome;
+
+    return Scaffold(
+      appBar: AppBar(
+        title:
+            const Text(
+          &#x27;Detail Transaksi&#x27;,
+        ),
+
+        backgroundColor:
+            Colors.red,
+
+        foregroundColor:
+            Colors.white,
+      ),
+
+      body: Padding(
+        padding:
+            const EdgeInsets.all(24),
+
+        child: Column(
+          children: [
+            Icon(
+              getCategoryIcon(
+                transaction.category,
+              ),
+
+              size: 80,
+
+              color: isIncome
+                  ? Colors.green
+                  : Colors.red,
+            ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+            Text(
+              transaction.title,
+
+              style:
+                  const TextStyle(
+                fontSize: 24,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            Text(
+              &#x27;${isIncome ? &#x27;+&#x27; : &#x27;-&#x27;} &#x27;
+              &#x27;${formatRupiah(transaction.amount)}&#x27;,
+
+              style:
+                  TextStyle(
+                fontSize: 32,
+                fontWeight:
+                    FontWeight.bold,
+
+                color: isIncome
+                    ? Colors.green
+                    : Colors.red,
+              ),
+            ),
+
+            const Divider(
+              height: 40,
+              thickness: 2,
+            ),
+
+            _buildDetailRow(
+              &#x27;Jenis&#x27;,
+              isIncome
+                  ? &#x27;Pemasukan&#x27;
+                  : &#x27;Pengeluaran&#x27;,
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            _buildDetailRow(
+              &#x27;Kategori&#x27;,
+              transaction.category,
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            _buildDetailRow(
+              &#x27;Tanggal&#x27;,
+              formatDate(
+                transaction.date,
+              ),
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            _buildDetailRow(
+              &#x27;Status&#x27;,
+              &#x27;Berhasil&#x27;,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(
+    String label,
+    String value,
+  ) {
+    return Row(
+      mainAxisAlignment:
+          MainAxisAlignment.spaceBetween,
+
+      children: [
+        Text(
+          label,
+
+          style:
+              const TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+          ),
+        ),
+
+        Text(
+          value,
+
+          style:
+              const TextStyle(
+            fontSize: 16,
+            fontWeight:
+                FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+}</code></pre>
+
+<h2>BAB IV. HASIL DAN PEMBAHASAN</h2>
+<h3>4.1 Tampilan Antarmuka</h3><p>Gambar 1 menampilkan rekonstruksi antarmuka tiga halaman utama beserta kondisi validasi formulir, berdasarkan data uji pada Tabel 2.</p>
+<div class="shots"><figure><div class="phone"><div class="bar">Dashboard Keuangan</div><div class="scr"><p class="hl">Halo, Budi</p><div class="bc"><small>Saldo Utama</small><big>Rp 8.186.000</big></div><div class="two"><span class="ob">⛛ Filter</span><span class="ob">⇅ Urutkan</span></div><p class="hl2">Transaksi</p><div class="card"><div class="li"><span class="av o">🎓</span><span class="tx"><b>Buku Kuliah</b><small>Pendidikan • 06/10/2026</small></span><b class="rd">- Rp 185.000</b></div><div class="li"><span class="av o">🎬</span><span class="tx"><b>Langganan Streaming</b><small>Hiburan • 05/10/2026</small></span><b class="rd">- Rp 54.000</b></div><div class="li"><span class="av g">🎁</span><span class="tx"><b>Bonus Proyek</b><small>Bonus • 04/10/2026</small></span><b class="gr">+ Rp 500.000</b></div><div class="li"><span class="av o">🚗</span><span class="tx"><b>Bensin Motor</b><small>Transportasi • 03/10/2026</small></span><b class="rd">- Rp 50.000</b></div><div class="li"><span class="av o">🍴</span><span class="tx"><b>Makan Siang</b><small>Makanan • 02/10/2026</small></span><b class="rd">- Rp 25.000</b></div><div class="li"><span class="av g">💼</span><span class="tx"><b>Gaji Oktober</b><small>Gaji • 01/10/2026</small></span><b class="gr">+ Rp 3.000.000</b></div></div><span class="fab">+</span></div></div><figcaption><b>Gambar 1a.</b> Dashboard</figcaption></figure><figure><div class="phone"><div class="bar">Catat Transaksi</div><div class="scr"><div class="fld"><i>Judul</i>Makan Siang</div><div class="fld"><i>Jenis Transaksi</i>↑ Pengeluaran ▾</div><div class="fld"><i>Nominal</i>Rp 25.000</div><div class="fld"><i>Kategori</i>🍴 Makanan ▾</div><div class="fld"><i>Tanggal Transaksi</i>02/10/2026 📅</div><div class="btn">Simpan</div></div></div><figcaption><b>Gambar 1b.</b> Catat Transaksi</figcaption></figure><figure><div class="phone"><div class="bar">Detail Transaksi</div><div class="scr"><div class="det"><div class="ic">🍴</div><h3>Makan Siang</h3><h2 class="rd">- Rp 25.000</h2><hr><div class="dr"><span>Jenis</span><b>Pengeluaran</b></div><div class="dr"><span>Kategori</span><b>Makanan</b></div><div class="dr"><span>Tanggal</span><b>02/10/2026</b></div><div class="dr"><span>Status</span><b>Berhasil</b></div></div></div></div><figcaption><b>Gambar 1c.</b> Detail Transaksi</figcaption></figure><figure><div class="phone"><div class="bar">Catat Transaksi</div><div class="scr"><div class="fld err"><i>Judul</i><u>Judul wajib diisi</u></div><div class="fld err"><i>Nominal</i><u>Nominal wajib diisi</u></div><div class="fld err"><i>Tanggal Transaksi</i><u>Tanggal wajib diisi</u></div><div class="btn">Simpan</div></div></div><figcaption><b>Gambar 1d.</b> Validasi formulir kosong</figcaption></figure></div>
+<div class="note">Catatan: gambar di atas merupakan rekonstruksi visual berbasis HTML/CSS dari kode sumber, bukan tangkapan layar emulator. Ganti dengan <i>screenshot</i> hasil <code>flutter run</code> bila diperlukan.</div>
+<h3>4.2 Data Uji</h3>
+<table class="t"><caption style="text-align:left"><b>Tabel 2.</b> Data uji (saldo awal Rp 5.000.000)</caption><tr><th>No</th><th>Judul</th><th>Jenis</th><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr><tr><td>1</td><td>Gaji Oktober</td><td>Pemasukan</td><td>Gaji</td><td>Rp 3.000.000</td><td>01/10/2026</td></tr><tr><td>2</td><td>Makan Siang</td><td>Pengeluaran</td><td>Makanan</td><td>Rp 25.000</td><td>02/10/2026</td></tr><tr><td>3</td><td>Bensin Motor</td><td>Pengeluaran</td><td>Transportasi</td><td>Rp 50.000</td><td>03/10/2026</td></tr><tr><td>4</td><td>Bonus Proyek</td><td>Pemasukan</td><td>Bonus</td><td>Rp 500.000</td><td>04/10/2026</td></tr><tr><td>5</td><td>Langganan Streaming</td><td>Pengeluaran</td><td>Hiburan</td><td>Rp 54.000</td><td>05/10/2026</td></tr><tr><td>6</td><td>Buku Kuliah</td><td>Pengeluaran</td><td>Pendidikan</td><td>Rp 185.000</td><td>06/10/2026</td></tr></table>
+<h3>4.3 Hasil Pengujian Logika</h3>
+<p><b>a. Fungsi <code>formatRupiah()</code>.</b> Fungsi menyisipkan titik setiap tiga digit dari kanan dan menambahkan tanda minus untuk nilai negatif.</p><div class="fn">Keluaran: pengujian pemformatan</div><pre class="out">formatRupiah(       0) -&gt; Rp 0
+formatRupiah(     500) -&gt; Rp 500
+formatRupiah(   25000) -&gt; Rp 25.000
+formatRupiah( 1250000) -&gt; Rp 1.250.000
+formatRupiah( 5000000) -&gt; Rp 5.000.000
+formatRupiah(  -85000) -&gt; -Rp 85.000</pre>
+<p><b>b. Perhitungan saldo.</b> Saldo = saldo awal + total pemasukan − total pengeluaran.</p><div class="fn">Keluaran: <code>currentBalance</code></div><pre class="out">Saldo awal       : Rp 5.000.000
+Total pemasukan : Rp 3.500.000
+Total pengeluaran: Rp 314.000
+Saldo saat ini  : Rp 8.186.000</pre>
+<p>Verifikasi manual: 5.000.000 + (3,500,000) − (314,000) = 8,186,000.</p>
+<p><b>c. Pengurutan bawaan.</b> Tanpa filter, daftar diurutkan menurut tanggal terbaru.</p><div class="fn">Keluaran: <code>filteredTransactions</code></div><pre class="out">[Urut: Tanggal terbaru]
+1. Buku Kuliah          - Rp 185.000     Pendidikan    06/10/2026
+2. Langganan Streaming  - Rp 54.000      Hiburan       05/10/2026
+3. Bonus Proyek         + Rp 500.000     Bonus         04/10/2026
+4. Bensin Motor         - Rp 50.000      Transportasi  03/10/2026
+5. Makan Siang          - Rp 25.000      Makanan       02/10/2026
+6. Gaji Oktober         + Rp 3.000.000   Gaji          01/10/2026</pre>
+<p><b>d. Filter pengeluaran dengan urutan nominal terbesar.</b></p><div class="fn">Keluaran: <code>filteredTransactions</code></div><pre class="out">[Filter: Pengeluaran | Kategori: Semua | Urut: Nominal terbesar]
+1. Buku Kuliah          - Rp 185.000     Pendidikan    06/10/2026
+2. Langganan Streaming  - Rp 54.000      Hiburan       05/10/2026
+3. Bensin Motor         - Rp 50.000      Transportasi  03/10/2026
+4. Makan Siang          - Rp 25.000      Makanan       02/10/2026</pre>
+<p><b>e. Filter pemasukan dengan urutan nominal terkecil.</b></p><div class="fn">Keluaran: <code>filteredTransactions</code></div><pre class="out">[Filter: Pemasukan | Kategori: Semua | Urut: Nominal terkecil]
+1. Bonus Proyek         + Rp 500.000     Bonus         04/10/2026
+2. Gaji Oktober         + Rp 3.000.000   Gaji          01/10/2026</pre>
+<p><b>f. Filter kategori.</b></p><div class="fn">Keluaran: <code>filteredTransactions</code></div><pre class="out">[Filter: Semua | Kategori: Transportasi | Urut: Tanggal terbaru]
+1. Bensin Motor         - Rp 50.000      Transportasi  03/10/2026</pre>
+<p><b>g. Kombinasi filter tanpa hasil.</b> Kondisi ini memicu tampilan pesan kosong pada <code>_buildTransactionList</code>.</p><div class="fn">Keluaran: <code>_buildTransactionList</code></div><pre class="out">[Filter: Pemasukan | Kategori: Makanan]
+Tidak ada transaksi</pre>
+<h3>4.4 Pembahasan</h3>
+<p>Hasil pengujian menunjukkan bahwa seluruh fungsi inti berjalan sesuai rancangan. Perhitungan saldo konsisten dengan verifikasi manual, dan penyaringan bertahap (jenis, kategori, lalu pengurutan) menghasilkan daftar yang tepat pada setiap kombinasi. Penyalinan daftar dengan <code>List.from(transactions)</code> sebelum penyaringan menjaga data asli tetap utuh sehingga pengurutan tidak mengubah urutan penyimpanan.</p>
+<p>Pengembalian objek melalui <code>Navigator.pop</code> dan penerimaan melalui <code>await Navigator.push</code> terbukti memisahkan tanggung jawab antarhalaman: halaman formulir hanya membentuk objek, sedangkan <i>state</i> daftar tetap dimiliki dasbor. Validasi formulir mencegah data tidak valid (judul kosong, nominal nol, tanggal belum dipilih), sehingga operasi <code>selectedDate!</code> pada <code>_saveTransaction</code> aman dijalankan.</p>
+<p>Beberapa keterbatasan teridentifikasi. Pertama, data hanya tersimpan di memori sehingga hilang saat aplikasi ditutup; penyimpanan persisten (misalnya <i>SQLite</i> atau <i>shared_preferences</i>) diperlukan. Kedua, fungsi <code>formatRupiah</code> terduplikasi pada tiga berkas dan sebaiknya diekstraksi menjadi utilitas bersama atau memakai paket <code>intl</code> (<code>NumberFormat</code>). Ketiga, nama pengguna ("Budi") dan saldo awal ditulis langsung (<i>hard-coded</i>). Keempat, pengelolaan <i>state</i> dengan <code>setState</code> kurang skalabel untuk aplikasi yang lebih besar, sehingga solusi seperti Provider atau Riverpod lebih sesuai. Terakhir, parameter <code>initialValue</code> pada <code>DropdownButtonFormField</code> membutuhkan versi Flutter terbaru; pada versi lama digunakan <code>value</code>.</p>
+<h2>BAB V. KESIMPULAN</h2><p>Aplikasi <i>expense tracker</i> berbasis Flutter berhasil diimplementasikan dengan fitur saldo dinamis, pencatatan transaksi tervalidasi, penyaringan, pengurutan, dan tampilan rincian. Praktikum ini memperlihatkan efektivitas hierarki widget, <code>StatefulWidget</code>, dan navigasi berbasis tumpukan dalam membangun aplikasi mobile interaktif. Pengembangan lanjutan disarankan mencakup penyimpanan persisten, modularisasi utilitas, dan <i>state management</i> yang lebih terstruktur.</p>
+<h2>DAFTAR PUSTAKA</h2><p>Google. (2024). <i>Flutter documentation</i>. https://docs.flutter.dev</p><p>Google. (2024). <i>Dart programming language documentation</i>. https://dart.dev/guides</p>
+</body></html>
